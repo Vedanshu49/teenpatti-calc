@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>3 Patti — Betting Tracker (Fixed)</title>
+  <title>3 Patti — Betting Tracker</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Vue 3 CDN -->
+ 
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
   <style>
@@ -25,7 +24,7 @@
     <p class="text-sm text-gray-600 mt-1">Rounds → multiple vertical iterations. Winner chosen per round only. Bets reserved live.</p>
   </header>
 
-  <!-- Setup / controls -->
+ 
   <section v-if="!gameStarted" class="bg-white shadow rounded p-6 mb-6">
     <h2 class="text-xl font-semibold mb-4">Setup Players</h2>
     <div class="flex gap-4 items-end">
@@ -51,10 +50,8 @@
     </div>
   </section>
 
-  <!-- Main game -->
   <section v-else class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-    <!-- Players panel -->
     <aside class="lg:col-span-1 bg-white p-4 rounded shadow">
       <div class="flex items-center justify-between mb-3">
         <h3 class="font-semibold text-lg">Players</h3>
@@ -90,7 +87,6 @@
       </div>
     </aside>
 
-    <!-- Iterations grid -->
     <main class="lg:col-span-2 bg-white rounded shadow p-4">
       <div class="flex items-center justify-between mb-4">
         <div>
@@ -131,7 +127,6 @@
       </div>
     </main>
 
-    <!-- Right: History & info -->
     <aside class="lg:col-span-1 bg-white rounded shadow p-4">
       <h3 class="text-lg font-semibold mb-2">Round History</h3>
       <div v-if="history.length === 0" class="text-sm text-gray-500">No rounds settled yet.</div>
@@ -153,7 +148,6 @@
     </aside>
   </section>
 
-  <!-- Footer -->
   <footer class="mt-6 text-center text-xs text-gray-500">
     
   </footer>
@@ -205,7 +199,6 @@
         selectedWinner.value = "";
         undoSnapshot.value = null;
         gameStarted.value = true;
-        // keep focus behavior minimal to avoid the previous bug
       }
 
       function resetGame() {
@@ -229,7 +222,6 @@
         return Math.max(0, p.wallet - reserved);
       }
 
-      // FIXED onBetInput: add new row but DO NOT move focus away.
       function onBetInput(rIndex, pIndex) {
         let raw = iterations[rIndex][pIndex];
         if (raw === null || raw === undefined) raw = "";
@@ -250,13 +242,10 @@
           }
         }
 
-        // Add a new blank row when last row has any value.
-        // IMPORTANT: we DO NOT focus the new row (fixes "digits drop vertically" bug).
         const lastRow = iterations[iterations.length - 1];
         const anyVal = lastRow.some(v => (v !== null && v !== undefined && v.toString().trim() !== ""));
-        if (anyVal && iterations.length < 200) { // safety cap
+        if (anyVal && iterations.length < 200) { 
           iterations.push(new Array(players.length).fill(""));
-          // DO NOT call focusCell here — that caused the bug.
         }
       }
 
